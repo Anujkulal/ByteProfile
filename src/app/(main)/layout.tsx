@@ -1,0 +1,13 @@
+import React from 'react'
+import Navbar from './_components/Navbar'
+
+const MainLayout = ({children}: {children: React.ReactNode}) => {
+  return (
+    <div className='flex min-h-screen flex-col'>
+        <Navbar />
+        {children}
+    </div>
+  )
+}
+
+export default MainLayout
