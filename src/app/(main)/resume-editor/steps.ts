@@ -1,6 +1,9 @@
 import { ResumeEditorFormProps } from "@/lib/types";
 import GeneralInfoForm from "./forms/GeneralInfoForm";
 import PersonalInfoForm from "./forms/PersonalInfoForm";
+import ExperienceForm from "./forms/ExperienceForm";
+import EducationForm from "./forms/EducationForm";
+import SkillsForm from "./forms/SkillsForm";
 
 export const steps: {
   title: string;
@@ -9,4 +12,7 @@ export const steps: {
 }[] = [
   { title: "General Info", component: GeneralInfoForm, key: "general-info" },
   { title: "Personal Info", component: PersonalInfoForm, key: "personal-info" },
+  { title: "Experience Info", component: ExperienceForm, key: "experience-info" },
+  { title: "Education Info", component: EducationForm, key: "education-info" },
+  { title: "Skills Info", component: SkillsForm, key: "skills-info" },
 ];
