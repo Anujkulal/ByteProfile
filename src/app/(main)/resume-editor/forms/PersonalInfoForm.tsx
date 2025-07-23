@@ -24,6 +24,9 @@ const PersonalInfoForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) 
       country: resumeData.country || "",
       phone: resumeData.phone || "",
       email: resumeData.email || "",
+      linkedInUrl: resumeData.linkedInUrl || "",
+      githubUrl: resumeData.githubUrl || "",
+      websiteUrl: resumeData.websiteUrl || "",
     },
   });
 
@@ -42,23 +45,6 @@ const PersonalInfoForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) 
   return () => subscription.unsubscribe();
 
   }, [form.watch, setResumeData]);
-
-
-// useEffect(() => {
-//   const subscription = form.watch((values, { name }) => {
-//     if (name === "photo") return; // Skip validation on photo
-
-//     const validate = async () => {
-//       const isValid = await form.trigger();
-//       console.log("Form is valid:", isValid);
-//       setResumeData({...resumeData, ...values})
-//     };
-
-//     validate();
-//   });
-
-//   return () => subscription.unsubscribe?.();
-// }, [form, setResumeData]);
 
   return (
     <div className="mx-auto max-w-xl space-y-6">
@@ -177,6 +163,45 @@ const PersonalInfoForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) 
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                         <Input type="email" {...field} placeholder="example@example.com" />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+            />
+            <FormField
+            control={form.control}
+            name="linkedInUrl"
+            render={({field}) => (
+                <FormItem>
+                    <FormLabel>LinkedIn URL</FormLabel>
+                    <FormControl>
+                        <Input type="url" {...field} placeholder="https://www.linkedin.com/in/username" />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+            />
+            <FormField
+            control={form.control}
+            name="githubUrl"
+            render={({field}) => (
+                <FormItem>
+                    <FormLabel>GitHub URL</FormLabel>
+                    <FormControl>
+                        <Input type="url" {...field} placeholder="https://github.com/username" />
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+            />
+            <FormField
+            control={form.control}
+            name="websiteUrl"
+            render={({field}) => (
+                <FormItem>
+                    <FormLabel>Website URL</FormLabel>
+                    <FormControl>
+                        <Input type="url" {...field} placeholder="https://yourwebsite.com" />
                     </FormControl>
                     <FormMessage />
                 </FormItem>
