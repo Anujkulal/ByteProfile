@@ -9,19 +9,27 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
-        outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
-        secondary:
-          "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
-        ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline",
-        add: "bg-gradient-to-r from-blue-500 to-blue-700 text-white shadow-xs",
-      },
+  default:
+    "bg-gradient-to-r from-blue-500 to-blue-800 text-white shadow-md hover:from-blue-800 hover:to-blue-800 transition-colors duration-400",
+    
+  destructive:
+    "bg-gradient-to-r from-red-500 to-red-700 text-white shadow-md hover:from-red-700 hover:to-red-700 focus-visible:ring-red-300 dark:focus-visible:ring-red-600 transition-colors duration-400",
+
+  outline:
+    "border border-gray-300 bg-gradient-to-r from-white to-gray-100 text-gray-800 shadow-sm hover:from-gray-100 hover:to-gray-200 dark:from-gray-700 dark:to-gray-800 dark:text-white dark:border-gray-600",
+
+  secondary:
+    "bg-gradient-to-r from-slate-500 to-slate-800 text-white shadow-md hover:from-slate-800 hover:to-slate-800 transition-colors duration-400",
+
+  ghost:
+    "bg-transparent text-primary hover:bg-gradient-to-r hover:from-gray-200 hover:to-gray-300 dark:hover:from-gray-700 dark:hover:to-gray-800",
+
+  link:
+    "text-blue-600 underline-offset-4 hover:underline hover:text-blue-800",
+
+  generate:
+    "bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 text-white shadow-md hover:from-green-500 hover:to-purple-700 transition-all duration-400 ease-in-out",
+},
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
