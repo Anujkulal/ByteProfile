@@ -31,10 +31,16 @@ model Resume {
   country String?
   phone String?
   email String?
+  linkedInUrl String?
+  githubUrl String?
+  websiteUrl String?
 
   experiences Experience[]
   educations Education[]
+  projects Project[]
   skills String[] @default([])
+  hobbies String[] @default([])
+  achievements String[] @default([])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -69,4 +75,19 @@ model Education {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("educations")
+}
+
+model Project {
+  id String @id @default(cuid())
+  name String?
+  description String[] @default([])
+  url String?
+  startDate DateTime?
+  endDate DateTime?
+
+  resumeId String
+  resume Resume @relation(fields: [resumeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("projects")
 }
