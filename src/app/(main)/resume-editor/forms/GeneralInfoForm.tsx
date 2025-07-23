@@ -1,18 +1,28 @@
 import { generalInfoSchema, generalInfoValues } from '@/lib/resumeSchema'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { ResumeEditorFormProps } from '@/lib/types'
 
-const GeneralInfoForm = () => {
+const GeneralInfoForm = ({resumeData, setResumeData}: ResumeEditorFormProps) => {
   const form = useForm<generalInfoValues>({
     resolver: zodResolver(generalInfoSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      title: resumeData.title || "",
+      description: resumeData.description || "",
     }
   })
+
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+    setResumeData({...resumeData, ...values})
+  });
+
+  return () => subscription.unsubscribe();
+
+  }, [form.watch, setResumeData]);
   return (
     <div className='max-w-xl mx-auto space-y-8'>
       <div className="space-y-1.5 text-center">
