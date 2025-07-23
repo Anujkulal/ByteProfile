@@ -10,7 +10,7 @@ interface ResumeBreadCrumbsProps {
 
 const ResumeBreadCrumbs = ({currentStep, setCurrentStep}: ResumeBreadCrumbsProps) => {
   return (
-    <div className='flex justify-center'>
+    <div className='flex justify-center shadow-sm p-1 rounded-2xl'>
         <Breadcrumb>
             <BreadcrumbList>
                 {steps.map((step) => (
