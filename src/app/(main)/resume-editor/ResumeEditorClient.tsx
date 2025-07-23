@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { MoveLeft, MoveRight } from "lucide-react";
+import { CircleX, MoveLeft, MoveRight } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import ResumeInfoForm from "./forms/GeneralInfoForm";
@@ -38,13 +38,14 @@ const ResumeEditorClient = () => {
 
   return (
     <div className="flex grow flex-col">
-      <header className="space-y-1.5 border- px-3 py-5 text-center">
-        <h1 className="text-lg font-semibold">Resume Editor</h1>
-        <p className="text-muted-foreground text-sm">
-          Edit your resume details below
-        </p>
-      </header>
-      <main className="relative grow">
+      
+      <div className="flex items-center gap-3 p-3">
+            <Button variant={"destructive"} className="rounded-full"  asChild>
+              <Link href={"/resumes"}> <CircleX /> </Link>
+            </Button>
+            <span className="text-muted-foreground opacity-0">Saving...</span>
+          </div>
+      <div className="relative grow">
         <div className="absolute top-0 bottom-0 flex w-full">
           <div className="w-full space-y-6 overflow-y-auto p-2 md:w-1/2">
             <ResumeBreadCrumbs
@@ -53,16 +54,7 @@ const ResumeEditorClient = () => {
             />
             <div className="shadow-sm rounded-2xl p-2">
             {FormComponent && <FormComponent resumeData={resumeData} setResumeData={setResumeData} />}
-
-            </div>
-          </div>
-          <div className="hidden w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent dark:via-slate-600 md:block" />
-          <ResumePreviewSection resumeData={resumeData} setResumeData={setResumeData} />
-        </div>
-      </main>
-      <footer className="w-full border-t px-3 py-5">
-        <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-2">
-          <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 m-3">
             <Button variant={"secondary"} onClick={previousStep ? () => setStep(previousStep): undefined} disabled={!previousStep}>
               <MoveLeft />
             </Button>
@@ -70,14 +62,13 @@ const ResumeEditorClient = () => {
               <MoveRight />
             </Button>
           </div>
-          <div className="flex items-center gap-3">
-            <Button variant={"secondary"} asChild>
-              <Link href={"/resumes"}>Close</Link>
-            </Button>
-            <span className="text-muted-foreground opacity-0">Saving...</span>
+            </div>
           </div>
+          <div className="hidden w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent dark:via-slate-600 md:block" />
+          <ResumePreviewSection resumeData={resumeData} setResumeData={setResumeData} />
         </div>
-      </footer>
+      </div>
+      
     </div>
   );
 };
