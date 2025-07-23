@@ -15,7 +15,7 @@ export type generalInfoValues = z.infer<typeof generalInfoSchema>;
 
 /**
  * @description Schema for personal information of the resume
- * This includes fields like firstName, lastName, jobTitle, city, country, phone, email, and photo
+ * This includes fields like firstName, lastName, jobTitle, city, country, phone, email, linkedInUrl, githubUrl, websiteUrl, and photo
  * The photo field is a custom type that allows for file uploads and validates the file type and size
  * It checks if the file is an instance of File and if it is an image type
  * It also checks if the file size is less than 4MB
@@ -42,6 +42,9 @@ export const personalInfoSchema = z.object({
   country: optionalString,
   phone: optionalString,
   email: optionalString,
+  linkedInUrl: optionalString,
+  githubUrl: optionalString,
+  websiteUrl: optionalString,
 });
 
 export type personalInfoValues = z.infer<typeof personalInfoSchema>;
@@ -101,6 +104,23 @@ export const SkillsSchema = z.object({
 export type SkillsValues = z.infer<typeof SkillsSchema>;
 
 /**
+ * @description Schema for projects section of the resume
+ */
+export const ProjectsSchema = z.object({
+  projects: z.array(
+    z.object({
+      name: optionalString,
+      description: z.array(z.string().trim()).optional(),
+      url: optionalString,
+      startDate: optionalString,
+      endDate: optionalString,
+    })
+  ).optional(),
+})
+
+export type ProjectsValues = z.infer<typeof ProjectsSchema>;
+
+/**
  * @description Schema for summary section of the resume
  * This includes a summary field which is an optional string
  * The summary can be empty or undefined
@@ -112,6 +132,30 @@ export const SummarySchema = z.object({
 export type SummaryValues = z.infer<typeof SummarySchema>;
 
 /**
+ * @description Schema for hobbies section of the resume
+ * This includes an array of hobbies, where each hobby is a string
+ * The hobbies are trimmed to remove any leading or trailing whitespace
+ * This schema allows for an empty array of hobbies, meaning no hobbies can be provided
+ */
+export const HobbiesSchema = z.object({
+  hobbies: z.array(z.string().trim()).optional(),
+})
+
+export type HobbiesValues = z.infer<typeof HobbiesSchema>;
+
+/**
+ * @description Schema for achievements section of the resume
+ * This includes an array of achievements, where each achievement is a string
+ * The achievements are trimmed to remove any leading or trailing whitespace
+ * This schema allows for an empty array of achievements, meaning no achievements can be provided
+ */
+export const AchievementsSchema = z.object({
+  achievements: z.array(z.string().trim()).optional(),
+})
+
+export type AchievementsValues = z.infer<typeof AchievementsSchema>;
+
+/**
  * @module ResumeSchema
  * @description Combined schema for the resume from the above schemas
  * This is the schema that will be used to validate the entire resume form
@@ -121,8 +165,11 @@ export const ResumeSchema = z.object({
   ...personalInfoSchema.shape,
   ...ExperienceSchema.shape,
   ...EducationSchema.shape,
+  ...ProjectsSchema.shape,
   ...SkillsSchema.shape,
   ...SummarySchema.shape,
+  ...HobbiesSchema.shape,
+  ...AchievementsSchema.shape,
 });
 
 export type ResumeValues = Omit<z.infer<typeof ResumeSchema>, "photo"> & {
