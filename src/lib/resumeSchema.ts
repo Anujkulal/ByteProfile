@@ -1,5 +1,4 @@
 import * as z from "zod";
-import { de } from "zod/v4/locales";
 
 export const optionalString = z.string().trim().optional().or(z.literal(""));
 
@@ -89,17 +88,28 @@ export type EducationValues = z.infer<typeof EducationSchema>;
 
 /**
  * @description Schema for skills section of the resume
- * This includes an array of skills, where each skill is an optional string that can be empty
+ * This includes an array of skills, where each skill is a string
  * The skills are trimmed to remove any leading or trailing whitespace
  * This schema allows for an empty array of skills, meaning no skills can be provided
  */
 export const SkillsSchema = z.object({
   skills: z.array(
-    z.string().trim().optional(),
-  )
+    z.string().trim(),
+  ).optional()
 })
 
 export type SkillsValues = z.infer<typeof SkillsSchema>;
+
+/**
+ * @description Schema for summary section of the resume
+ * This includes a summary field which is an optional string
+ * The summary can be empty or undefined
+ */
+export const SummarySchema = z.object({
+  summary: optionalString,
+})
+
+export type SummaryValues = z.infer<typeof SummarySchema>;
 
 /**
  * @module ResumeSchema
@@ -112,6 +122,7 @@ export const ResumeSchema = z.object({
   ...ExperienceSchema.shape,
   ...EducationSchema.shape,
   ...SkillsSchema.shape,
+  ...SummarySchema.shape,
 });
 
 export type ResumeValues = Omit<z.infer<typeof ResumeSchema>, "photo"> & {
