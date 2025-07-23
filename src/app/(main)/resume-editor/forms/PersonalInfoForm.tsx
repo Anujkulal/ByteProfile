@@ -8,48 +8,57 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { personalInfoSchema, personalInfoValues } from "@/lib/resumeSchema";
+import { ResumeEditorFormProps } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-const PersonalInfoForm = () => {
+const PersonalInfoForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) => {
   const form = useForm<personalInfoValues>({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      jobTitle: "",
-      city: "",
-      country: "",
-      phone: "",
-      email: "",
+      firstName: resumeData.firstName || "",
+      lastName: resumeData.lastName || "",
+      jobTitle: resumeData.jobTitle || "",
+      city: resumeData.city || "",
+      country: resumeData.country || "",
+      phone: resumeData.phone || "",
+      email: resumeData.email || "",
     },
   });
 
-//   useEffect(() => {
-//     const { unsubscribe } = form.watch(async () => {
-//       const isValid = await form.trigger();
-//       console.log("Form is valid:", isValid);
-//       if (!isValid) return;
-//     });
-//     return unsubscribe;
-//   }, [form]);
+  useEffect(() => {
+    // const { unsubscribe } = form.watch(async () => {
+    //   const isValid = await form.trigger();
+    //   console.log("Form is valid:", isValid);
+    //   if (!isValid) return;
+    // });
+    // return unsubscribe;
+
+    const subscription = form.watch((values) => {
+    setResumeData({...resumeData, ...values})
+  });
+
+  return () => subscription.unsubscribe();
+
+  }, [form.watch, setResumeData]);
 
 
 // useEffect(() => {
-//   const subscription = form.watch((value, { name }) => {
+//   const subscription = form.watch((values, { name }) => {
 //     if (name === "photo") return; // Skip validation on photo
 
 //     const validate = async () => {
 //       const isValid = await form.trigger();
 //       console.log("Form is valid:", isValid);
+//       setResumeData({...resumeData, ...values})
 //     };
 
 //     validate();
 //   });
 
 //   return () => subscription.unsubscribe?.();
-// }, [form]);
+// }, [form, setResumeData]);
 
   return (
     <div className="mx-auto max-w-xl space-y-6">
