@@ -10,6 +10,7 @@ import { useSearchParams } from "next/navigation";
 import { steps } from "./steps";
 import ResumeBreadCrumbs from "../_components/ResumeBreadCrumbs";
 import { ResumeValues } from "@/lib/resumeSchema";
+import ResumePreviewSection from "./ResumePreviewSection";
 
 const ResumeEditorClient = () => {
   const searchParams = useSearchParams();
@@ -56,11 +57,7 @@ const ResumeEditorClient = () => {
             </div>
           </div>
           <div className="hidden w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent dark:via-slate-600 md:block" />
-          <div className="hidden w-1/2 md:flex overflow-y-auto shadow-sm rounded-2xl p-2 m-1">
-            <pre>
-              {JSON.stringify(resumeData, null, 2)}
-            </pre>
-          </div>
+          <ResumePreviewSection resumeData={resumeData} setResumeData={setResumeData} />
         </div>
       </main>
       <footer className="w-full border-t px-3 py-5">
