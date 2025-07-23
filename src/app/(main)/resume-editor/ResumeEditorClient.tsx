@@ -37,7 +37,7 @@ const ResumeEditorClient = () => {
 
   return (
     <div className="flex grow flex-col">
-      <header className="space-y-1.5 border-b px-3 py-5 text-center">
+      <header className="space-y-1.5 border- px-3 py-5 text-center">
         <h1 className="text-lg font-semibold">Resume Editor</h1>
         <p className="text-muted-foreground text-sm">
           Edit your resume details below
@@ -45,15 +45,18 @@ const ResumeEditorClient = () => {
       </header>
       <main className="relative grow">
         <div className="absolute top-0 bottom-0 flex w-full">
-          <div className="w-full space-y-6 overflow-y-auto p-3 md:w-1/2">
+          <div className="w-full space-y-6 overflow-y-auto p-2 md:w-1/2">
             <ResumeBreadCrumbs
               currentStep={currentStep}
               setCurrentStep={setStep}
             />
+            <div className="shadow-sm rounded-2xl p-2">
             {FormComponent && <FormComponent resumeData={resumeData} setResumeData={setResumeData} />}
+
+            </div>
           </div>
-          <div className="grow md:border-r" />
-          <div className="hidden w-1/2 md:flex">
+          <div className="hidden w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent dark:via-slate-600 md:block" />
+          <div className="hidden w-1/2 md:flex overflow-y-auto shadow-sm rounded-2xl p-2 m-1">
             <pre>
               {JSON.stringify(resumeData, null, 2)}
             </pre>
