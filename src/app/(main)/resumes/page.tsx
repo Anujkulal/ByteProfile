@@ -16,7 +16,7 @@ const ResumesPage = (props: Props) => {
     <main className="mx-auto w-full max-w-7xl space-y-6 px-4 py-8">
       <div className="mx-auto flex w-fit">
 
-      <Button asChild variant={"add"}>
+      <Button asChild variant={"default"}>
         <Link href={"/resume-editor"} className="flex gap-2">
           <PlusCircle size={30} />
           Resume
