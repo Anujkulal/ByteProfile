@@ -13,7 +13,7 @@ import { useTheme } from "next-themes";
 const Navbar = () => {
   const {theme} = useTheme();
   return (
-    <header className="shadow-sm">
+    <header className="">
       <div className="mx-auto flex max-w-7xl items-center justify-between p-3">
         <Link href={"/resumes"} className="flex items-center gap-2">
           <Image src={logo} alt="Logo" width={35} height={35} className="" />
