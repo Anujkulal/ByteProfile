@@ -30,7 +30,7 @@ const EducationForm = ({
     const subscription = form.watch((values) => {
       setResumeData({
         ...resumeData,
-        educations: values.educations?.filter((exp) => exp != undefined) || [],
+        educations: values.educations?.filter((edu) => edu != undefined) || [],
       });
     });
     return () => subscription.unsubscribe();
