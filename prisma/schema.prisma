@@ -32,7 +32,23 @@ model Resume {
   phone String?
   email String?
 
+  experiences Experience[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("resumes")
+}
+
+model Experience {
+  id String @id @default(cuid())
+  position String?
+  organization String?
+  startDate DateTime?
+  endDate DateTime?
+  description String?
+  resumeId String
+  resume Resume @relation(fields: [resumeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("experiences")
 }
