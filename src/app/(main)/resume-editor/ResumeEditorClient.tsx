@@ -14,6 +14,7 @@ import { ResumeValues } from "@/lib/resumeSchema";
 const ResumeEditorClient = () => {
   const searchParams = useSearchParams();
   const [resumeData, setResumeData] = useState<ResumeValues>({});
+
   const currentStep = searchParams.get("step") || steps[0].key;
 
   function setStep(key: string) {
@@ -49,10 +50,14 @@ const ResumeEditorClient = () => {
               currentStep={currentStep}
               setCurrentStep={setStep}
             />
-            {FormComponent && <FormComponent />}
+            {FormComponent && <FormComponent resumeData={resumeData} setResumeData={setResumeData} />}
           </div>
           <div className="grow md:border-r" />
-          <div className="hidden w-1/2 md:flex">right</div>
+          <div className="hidden w-1/2 md:flex">
+            <pre>
+              {JSON.stringify(resumeData, null, 2)}
+            </pre>
+          </div>
         </div>
       </main>
       <footer className="w-full border-t px-3 py-5">
