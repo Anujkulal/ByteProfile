@@ -109,7 +109,7 @@ export type SkillsValues = z.infer<typeof SkillsSchema>;
 export const ProjectsSchema = z.object({
   projects: z.array(
     z.object({
-      name: optionalString,
+      title: optionalString,
       description: z.array(z.string().trim()).optional(),
       url: optionalString,
       startDate: optionalString,
@@ -170,6 +170,9 @@ export const ResumeSchema = z.object({
   ...SummarySchema.shape,
   ...HobbiesSchema.shape,
   ...AchievementsSchema.shape,
+
+  colorHex: optionalString, // Optional color hex for the resume theme
+  borderStyle: optionalString, // Optional border style for the resume
 });
 
 export type ResumeValues = Omit<z.infer<typeof ResumeSchema>, "photo"> & {
