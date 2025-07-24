@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { formatDate } from "date-fns";
+import { BorderStyles } from "./BorderStyle";
 
 interface ResumePreviewerProps {
   resumeData: ResumeValues;
@@ -62,6 +63,8 @@ const PersonalInfo = ({ resumeData }: ResumeSectionProps) => {
     linkedInUrl,
     githubUrl,
     websiteUrl,
+    colorHex,
+    borderStyle
   } = resumeData;
 
   const [photoSrc, setPhotoSrc] = useState(photo instanceof File ? "" : photo);
@@ -90,11 +93,14 @@ const PersonalInfo = ({ resumeData }: ResumeSectionProps) => {
           width={100}
           height={100}
           className="aspect-square object-cover"
+          style= {{
+            borderRadius: borderStyle === BorderStyles.SQUARE ? "0px" : borderStyle === BorderStyles.CIRCLE ? "50%" : "10px",
+          }}
         />
       )}
       <div className="space-y-2.5">
         <div className="space-y-1">
-          <p className="text-3xl font-bold">
+          <p className="text-3xl font-bold" style={{ color: colorHex }}>
             {firstName} {lastName}
           </p>
           <p className="font-medium">{jobTitle}</p>
@@ -137,15 +143,15 @@ const PersonalInfo = ({ resumeData }: ResumeSectionProps) => {
 };
 
 const SummaryInfo = ({ resumeData }: ResumeSectionProps) => {
-  const { summary } = resumeData;
+  const { summary, colorHex } = resumeData;
   if (!summary) return null;
   return (
     <>
-      <hr className="border-2" />
+      <hr className="border-2" style={{ borderColor: colorHex }} />
       <div className="break-inside-avoid space-y-3">
         {" "}
         {/** This is to avoid breaking the section when printing */}
-        <p className="text-lg font-semibold">Professional Profile</p>
+        <p className="text-lg font-semibold" style={{ color: colorHex }}>Professional Profile</p>
         <div className="whitespace-pre-line">{summary}</div>
       </div>
     </>
@@ -153,7 +159,7 @@ const SummaryInfo = ({ resumeData }: ResumeSectionProps) => {
 };
 
 const ExperienceInfo = ({ resumeData }: ResumeSectionProps) => {
-  const { experiences } = resumeData;
+  const { experiences, colorHex } = resumeData;
 
   const hasExperiences = experiences?.filter(
     (exp) => Object.values(exp).filter(Boolean).length > 0,
@@ -163,9 +169,9 @@ const ExperienceInfo = ({ resumeData }: ResumeSectionProps) => {
 
   return (
     <div className="">
-      <hr className="border-2" />
+      <hr className="border-2" style={{ borderColor: colorHex }}/>
       <div className="space-y-3">
-        <p className="text-lg font-semibold"> Experiences </p>
+        <p className="text-lg font-semibold" style={{ color: colorHex }}> Experiences </p>
         {hasExperiences.map((exp, index) => (
           <div key={index} className="break-inside-avoid space-y-1">
             <div className="flex items-center justify-between text-sm font-semibold">
@@ -187,7 +193,7 @@ const ExperienceInfo = ({ resumeData }: ResumeSectionProps) => {
 };
 
 const EducationInfo = ({ resumeData }: ResumeSectionProps) => {
-  const { educations } = resumeData;
+  const { educations, colorHex } = resumeData;
 
   const hasEducations = educations?.filter(
     (edu) => Object.values(edu).filter(Boolean).length > 0,
@@ -197,8 +203,8 @@ const EducationInfo = ({ resumeData }: ResumeSectionProps) => {
 
   return (
     <div className="space-y-3">
-      <hr className="border-2" />
-      <p className="text-lg font-semibold">Education</p>
+      <hr className="border-2" style={{ borderColor: colorHex }} />
+      <p className="text-lg font-semibold" style={{ color: colorHex }}>Education</p>
       {hasEducations.map((edu, index) => (
         <div key={index} className="break-inside-avoid space-y-1">
           <div className="flex items-center justify-between text-sm font-semibold">
@@ -221,44 +227,76 @@ const EducationInfo = ({ resumeData }: ResumeSectionProps) => {
 };
 
 const ProjectsInfo = ({ resumeData }: ResumeSectionProps) => {
-  const { projects } = resumeData;
+  const { projects, colorHex } = resumeData;
 
   if (!projects || !projects.length) return null;
 
   return (
-    <div className="space-y-3">
-      <hr className="border-2" />
-      <p className="text-lg font-semibold">Projects</p>
-      <ul className="list-disc pl-5">
+    <div className="break-inside-avoid space-y-3">
+      <hr className="border-2" style={{ borderColor: colorHex }} />
+      <p className="text-lg font-semibold" style={{ color: colorHex }}>
+        Projects
+      </p>
+      
+      <div className="space-y-4">
         {projects.map((project, index) => (
-          <li
-            key={index}
-            className="text-sm"
-          >
-            {project.name}
-            <ul>
-              {project.description?.map((desc, index) => (
-                <li key={index} className="text-xs">
-                  {desc}
-                </li>
-              ))}
-            </ul>
-          </li>
+          <div key={index} className="break-inside-avoid space-y-2">
+            {/* Project Header */}
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-semibold text-gray-900">
+                {project.url ? (
+                  <a 
+                    href={project.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                    style={{ color: colorHex }}
+                  >
+                    {project.title}
+                  </a>
+                ) : (
+                  <span style={{ color: colorHex }}>{project.title}</span>
+                )}
+              </h4>
+              
+              {/* Date Range */}
+              {project.startDate && (
+                <span className="text-xs text-gray-600">
+                  {formatDate(project.startDate, "MM/yyyy")}
+                  {project.endDate && ` - ${formatDate(project.endDate, "MM/yyyy")}`}
+                </span>
+              )}
+            </div>
+
+            {/* Project Description */}
+            {project.description && project.description.length > 0 && (
+              <ul className="ml-4 space-y-1">
+                {project.description
+                  .filter(desc => desc?.trim()) // Filter out empty descriptions
+                  .map((desc, descIndex) => (
+                    <li key={descIndex} className="relative text-xs">
+                      <span className="absolute -left-3 top-1.5 h-1 w-1 rounded-full bg-black" />
+                      {desc.trim()}
+                    </li>
+                  ))}
+              </ul>
+            )}
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
 
 const SkillsInfo = ({ resumeData }: ResumeSectionProps) => {
-  const { skills } = resumeData;
+  const { skills, colorHex } = resumeData;
 
   if (!skills || !skills.length) return null;
 
   return (
     <div className="space-y-3">
-      <hr className="border-2" />
-      <p className="text-lg font-semibold">Skills</p>
+      <hr className="border-2" style={{ borderColor: colorHex }} />
+      <p className="text-lg font-semibold" style={{ color: colorHex }}>Skills</p>
       <div className="flex flex-wrap gap-2">
         {skills.map((skill, index) => (
           <span
@@ -275,14 +313,14 @@ const SkillsInfo = ({ resumeData }: ResumeSectionProps) => {
 
 
 const HobbiesInfo = ({ resumeData }: ResumeSectionProps) => {
-  const { hobbies } = resumeData;
+  const { hobbies, colorHex } = resumeData;
 
   if (!hobbies || !hobbies.length) return null;
 
   return (
     <div className="space-y-3">
-      <hr className="border-2" />
-      <p className="text-lg font-semibold">Hobbies</p>
+      <hr className="border-2" style={{ borderColor: colorHex }} />
+      <p className="text-lg font-semibold" style={{ color: colorHex }}>Hobbies</p>
       <ul className="list-disc pl-5">
         {hobbies.map((hobby, index) => (
           <li
@@ -298,14 +336,14 @@ const HobbiesInfo = ({ resumeData }: ResumeSectionProps) => {
 };
 
 const AchievementsInfo = ({ resumeData }: ResumeSectionProps) => {
-  const { achievements } = resumeData;
+  const { achievements, colorHex } = resumeData;
 
   if (!achievements || !achievements.length) return null;
 
   return (
     <div className="space-y-3">
-      <hr className="border-2" />
-      <p className="text-lg font-semibold">Hobbies</p>
+      <hr className="border-2" style={{ borderColor: colorHex }} />
+      <p className="text-lg font-semibold" style={{ color: colorHex }}>Achievements</p>
       <ul className="list-disc pl-5">
         {achievements.map((achievement, index) => (
           <li
