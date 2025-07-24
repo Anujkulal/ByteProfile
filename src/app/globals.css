@@ -120,3 +120,27 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* The entire scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px; /* for horizontal scrollbars */
+}
+
+/* The draggable part of the scrollbar */
+::-webkit-scrollbar-thumb {
+  background: #555555;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+/* The track (background) of the scrollbar */
+::-webkit-scrollbar-track {
+  /* background: #f1f1f115; */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555555;
+}
