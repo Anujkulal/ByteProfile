@@ -79,7 +79,7 @@ model Education {
 
 model Project {
   id String @id @default(cuid())
-  name String?
+  title String?
   description String[] @default([])
   url String?
   startDate DateTime?
