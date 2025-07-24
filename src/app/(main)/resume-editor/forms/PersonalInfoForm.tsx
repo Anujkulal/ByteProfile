@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -10,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { personalInfoSchema, personalInfoValues } from "@/lib/resumeSchema";
 import { ResumeEditorFormProps } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 
 const PersonalInfoForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) => {
@@ -46,6 +47,8 @@ const PersonalInfoForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) 
 
   }, [form.watch, setResumeData]);
 
+  const photoInputUrl = useRef<HTMLInputElement>(null);
+
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div className="space-y-1.5 text-center">
@@ -60,18 +63,30 @@ const PersonalInfoForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) 
             render={({ field: { value, ...fieldValues } }) => (
               <FormItem>
                 <FormLabel>Profile Photo</FormLabel>
-                <FormControl>
-                  <Input
-                    {...fieldValues}
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      //File handling
-                      const file = e.target.files?.[0]; // select the single file from the **FileList object**, incase the user selects multiple files
-                      fieldValues.onChange(file);
-                    }}
-                  />
-                </FormControl>
+                <div className="flex items-center gap-2">
+                  <FormControl>
+                    <Input
+                      {...fieldValues}
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        //File handling
+                        const file = e.target.files?.[0]; // select the single file from the **FileList object**, incase the user selects multiple files
+                        fieldValues.onChange(file);
+                      }}
+                      ref={photoInputUrl}
+                    />
+                  </FormControl>
+                      <Button
+                      variant={"destructive"} type="button" onClick={() => {
+                        fieldValues.onChange(null);
+                        if(photoInputUrl.current){
+                          photoInputUrl.current.value = ""; // Clear the input value
+                        }
+                      }}>
+                        Cancel
+                      </Button>
+                </div>
                 <FormMessage />
               </FormItem>
             )}
