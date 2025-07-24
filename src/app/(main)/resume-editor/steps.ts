@@ -15,9 +15,9 @@ import {
   Briefcase,
   FolderKanban,
   Brain,
-  Palette,
   Trophy,
-  List
+  List,
+  BookOpen
 } from "lucide-react";
 
 import type { LucideIcon } from "lucide-react";
@@ -34,7 +34,7 @@ export const steps: {
   { title: "Experience Info", icon: Briefcase, component: ExperienceForm, key: "experience-info" },
   { title: "Project Info", icon: FolderKanban, component: ProjectsForm, key: "project-info" },
   { title: "Skills Info", icon: Brain, component: SkillsForm, key: "skills-info" },
-  { title: "Hobbies Info", icon: Palette, component: HobbiesForm, key: "hobbies-info" },
+  { title: "Hobbies Info", icon: BookOpen, component: HobbiesForm, key: "hobbies-info" },
   { title: "Achievements Info", icon: Trophy, component: AchievementsForm, key: "achievements-info" },
   { title: "Summary Info", icon: List, component: SummaryForm, key: "summary-info" },
 ];
