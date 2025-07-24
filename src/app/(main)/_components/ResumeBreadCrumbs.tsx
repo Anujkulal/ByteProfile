@@ -21,8 +21,8 @@ const ResumeBreadCrumbs = ({
   setCurrentStep,
 }: ResumeBreadCrumbsProps) => {
   return (
-    <div className="flex justify-center">
-      <Breadcrumb>
+    <div className="flex justify-center ">
+      <Breadcrumb className="hidden sm:block">
         <BreadcrumbList>
           {steps.map((step) => {
             const Icon = step.icon;
