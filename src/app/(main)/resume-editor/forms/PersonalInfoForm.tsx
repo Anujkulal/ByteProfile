@@ -46,8 +46,11 @@ const PersonalInfoForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) 
   return () => subscription.unsubscribe();
 
   }, [form.watch, setResumeData]);
+  
 
   const photoInputUrl = useRef<HTMLInputElement>(null);
+
+  
 
   return (
     <div className="mx-auto max-w-xl space-y-6">
