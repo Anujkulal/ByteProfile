@@ -34,6 +34,7 @@ import {
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
+import GenerateExperienceButton from "./_components/GenerateExperienceButton";
 
 const ExperienceForm = ({
   resumeData,
@@ -178,6 +179,7 @@ function ExperienceItem({ form, index, remove, id }: ExperienceItemProps) {
     >
       <div className="flex justify-between gap-2">
         <span className="font-semibold">Experience {index + 1}</span>
+        <GenerateExperienceButton onGenerate={exp => form.setValue(`experiences.${index}`, exp)} />
         <div className="flex items-center gap-6">
           <Button
             variant={"destructive"}
