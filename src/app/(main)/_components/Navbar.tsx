@@ -5,23 +5,26 @@ import Link from "next/link";
 import React from "react";
 import logo from "@/assets/logo.png"; // Adjust the path as necessary
 import { UserButton } from "@clerk/nextjs";
-import { CreditCard } from "lucide-react";
-import ThemeToggler from "@/components/home/ThemeToggler";
+import { CreditCard, Moon, Sun } from "lucide-react";
 import {dark} from "@clerk/themes"
 import { useTheme } from "next-themes";
 
 const Navbar = () => {
-  const {theme} = useTheme();
+  const {theme, setTheme} = useTheme();
+
+  const handleThemeToggle = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  }
   return (
     <header className="">
       <div className="mx-auto flex max-w-7xl items-center justify-between p-2">
         <Link href={"/resumes"} className="flex items-center gap-2">
-          <Image src={logo} alt="Logo" width={35} height={35} className="" />
+          <Image src={logo} alt="Logo" width={35} height={35} className="rounded-full" />
           <span className="text-xl font-bold tracking-tight">ByteProfile</span>
         </Link>
         <div className="flex items-center gap-4">
 
-        <ThemeToggler />
+        
         <UserButton
           appearance={{
             elements: {
@@ -34,11 +37,13 @@ const Navbar = () => {
           }}
           >
           <UserButton.MenuItems>
-            <UserButton.Link
-              label="Billing"
-              labelIcon={<CreditCard className="size-4" />}
-              href="/billing"
+              <UserButton.Action 
+              label={theme === "light" ? "Light Mode" : "Dark Mode"}
+              labelIcon={theme === "light" ? <Sun className="size-4" /> : <Moon className="size-4" />}
+              onClick={handleThemeToggle}
               />
+              <UserButton.Action label="manageAccount" />
+              <UserButton.Action label="signOut" />
           </UserButton.MenuItems>
         </UserButton>
               </div>
