@@ -3,6 +3,30 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@keyframes twinkle {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.animate-twinkle {
+  animation: twinkle 1s ease-in-out infinite;
+}
+
+@media print{
+  #resumePreviewContent{
+    zoom: 1 !important;
+    /* padding: 0; */
+  }
+}
+
+#resumePreviewContent{
+  font-family: Geist Sans, sans-serif;
+}
+
+@page {
+  size: A4;
+  margin: 0.6cm;
+}
 
 @theme inline {
   --color-background: var(--background);
