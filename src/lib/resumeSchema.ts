@@ -76,16 +76,18 @@ export type ExperienceValues = z.infer<typeof ExperienceSchema>;
  * All fields are optional strings that can be empty or undefined
  */
 export const EducationSchema = z.object({
-  educations: z.array(
-    z.object({
-      institution: optionalString,
-      degree: optionalString,
-      fieldOfStudy: optionalString,
-      startDate: optionalString,
-      endDate: optionalString,
-    })
-  ).optional(),
-})
+  educations: z
+    .array(
+      z.object({
+        institution: optionalString,
+        degree: optionalString,
+        fieldOfStudy: optionalString,
+        startDate: optionalString,
+        endDate: optionalString,
+      }),
+    )
+    .optional(),
+});
 
 export type EducationValues = z.infer<typeof EducationSchema>;
 
@@ -96,10 +98,8 @@ export type EducationValues = z.infer<typeof EducationSchema>;
  * This schema allows for an empty array of skills, meaning no skills can be provided
  */
 export const SkillsSchema = z.object({
-  skills: z.array(
-    z.string().trim(),
-  ).optional()
-})
+  skills: z.array(z.string().trim()).optional(),
+});
 
 export type SkillsValues = z.infer<typeof SkillsSchema>;
 
@@ -107,16 +107,18 @@ export type SkillsValues = z.infer<typeof SkillsSchema>;
  * @description Schema for projects section of the resume
  */
 export const ProjectsSchema = z.object({
-  projects: z.array(
-    z.object({
-      title: optionalString,
-      description: z.array(z.string().trim()).optional(),
-      url: optionalString,
-      startDate: optionalString,
-      endDate: optionalString,
-    })
-  ).optional(),
-})
+  projects: z
+    .array(
+      z.object({
+        title: optionalString,
+        description: z.array(z.string().trim()).optional(),
+        url: optionalString,
+        startDate: optionalString,
+        endDate: optionalString,
+      }),
+    )
+    .optional(),
+});
 
 export type ProjectsValues = z.infer<typeof ProjectsSchema>;
 
@@ -127,7 +129,7 @@ export type ProjectsValues = z.infer<typeof ProjectsSchema>;
  */
 export const SummarySchema = z.object({
   summary: optionalString,
-})
+});
 
 export type SummaryValues = z.infer<typeof SummarySchema>;
 
@@ -139,7 +141,7 @@ export type SummaryValues = z.infer<typeof SummarySchema>;
  */
 export const HobbiesSchema = z.object({
   hobbies: z.array(z.string().trim()).optional(),
-})
+});
 
 export type HobbiesValues = z.infer<typeof HobbiesSchema>;
 
@@ -151,7 +153,7 @@ export type HobbiesValues = z.infer<typeof HobbiesSchema>;
  */
 export const AchievementsSchema = z.object({
   achievements: z.array(z.string().trim()).optional(),
-})
+});
 
 export type AchievementsValues = z.infer<typeof AchievementsSchema>;
 
@@ -179,3 +181,44 @@ export type ResumeValues = Omit<z.infer<typeof ResumeSchema>, "photo"> & {
   id?: string; // Optional ID for the resume, useful for updates
   photo?: File | string | null; // Optional file for the photo, to handle file uploads
 };
+
+// AI Generation Schemas
+/**
+ * @description Schema for generating experience using AI
+ * This schema is used to validate the input for generating experience entries
+ */
+export const generateExperienceSchema = z.object({
+  description: z
+    .string()
+    .trim()
+    .min(1, "Required")
+    .min(20, "Must be at least 20 characters"),
+});
+
+export type GenerateExperienceInput = z.infer<typeof generateExperienceSchema>;
+
+/**
+ * @description Schema for generating projects using AI
+ */
+export const generateProjectSchema = z.object({
+  description: z
+    .string()
+    .trim()
+    .min(1, "Required")
+    .min(20, "Must be at least 20 characters"),
+});
+
+export type GenerateProjectInput = z.infer<typeof generateProjectSchema>;
+
+/**
+ * @description Schema for generating summary using AI
+ * This schema combines the experience, education, and skills schemas
+ * to provide a comprehensive input for generating a resume summary
+ */
+export const generateSummarySchema = z.object({
+  ...ExperienceSchema.shape,
+  ...EducationSchema.shape,
+  ...SkillsSchema.shape,
+});
+
+export type GenerateSummaryInput = z.infer<typeof generateSummarySchema>;
