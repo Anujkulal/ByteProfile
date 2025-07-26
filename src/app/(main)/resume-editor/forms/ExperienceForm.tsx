@@ -51,7 +51,15 @@ const ExperienceForm = ({
       setResumeData({
         ...resumeData,
         experiences:
-          values.experiences?.filter((exp) => exp != undefined) || [],
+          values.experiences
+            ?.filter((exp) => exp != undefined)
+            .map((exp) => ({
+              ...exp,
+              description:
+                exp.description?.filter(
+                  (desc): desc is string => desc != undefined,
+                ) || [],
+            })) || [],
       });
     });
     return () => subscription.unsubscribe();
@@ -129,7 +137,7 @@ const ExperienceForm = ({
                   organization: "",
                   startDate: "",
                   endDate: "",
-                  description: "",
+                  description: [],
                 })
               }
             >
@@ -161,9 +169,12 @@ function ExperienceItem({ form, index, remove, id }: ExperienceItemProps) {
   } = useSortable({ id });
   return (
     <div
-      className={cn("bg-background space-y-3 rounded-md border p-3", isDragging && "relative shadow-xl z-50 cursor-grab")}
+      className={cn(
+        "bg-background space-y-3 rounded-md border p-3",
+        isDragging && "relative z-50 cursor-grab shadow-xl",
+      )}
       ref={setNodeRef}
-      style={{transform: CSS.Transform.toString(transform), transition}}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
     >
       <div className="flex justify-between gap-2">
         <span className="font-semibold">Experience {index + 1}</span>
@@ -256,8 +267,22 @@ function ExperienceItem({ form, index, remove, id }: ExperienceItemProps) {
             <FormLabel>Description</FormLabel>
             <FormControl>
               {/* slice to get YYYY-MM-DD format (10 chars) and remove time */}
-              <Textarea {...field} />
+              <Textarea
+                placeholder="Enter each point on a new line..."
+                value={
+                  Array.isArray(field.value)
+                    ? field.value.join("\n")
+                    : field.value || ""
+                }
+                onChange={(e) => {
+                  const description = e.target.value.split("\n");
+                  field.onChange(description);
+                }}
+              />
             </FormControl>
+            <FormDescription>
+              Each line will be treated as a separate bullet point
+            </FormDescription>
           </FormItem>
         )}
       />
