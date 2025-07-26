@@ -132,7 +132,7 @@ const PersonalInfo = ({ resumeData, className }: ResumeSectionProps) => {
     <div className={cn("flex items-center gap-6", className)}>
       {photoSrc && (
         <Image
-          src={photoSrc}
+          src={photoSrc || ""}
           alt="Profile Photo"
           width={100}
           height={100}
