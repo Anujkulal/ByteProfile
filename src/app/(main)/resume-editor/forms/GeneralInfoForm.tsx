@@ -36,9 +36,9 @@ const GeneralInfoForm = ({
     <div className="mx-auto max-w-xl space-y-8">
       <div className="space-y-1.5 text-center">
         <h2 className="text-2xl font-semibold">General info</h2>
-        <p className="text-muted-foreground text-sm">
+        {/* <p className="text-muted-foreground text-sm">
           This will not appear on your resume
-        </p>
+        </p> */}
       </div>
       <Form {...form}>
         <form className="space-y-3">
@@ -47,7 +47,7 @@ const GeneralInfoForm = ({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Project name</FormLabel>
+                <FormLabel>Resume name</FormLabel>
                 <FormControl>
                   <Input {...field} placeholder="My cool resume" autoFocus />
                 </FormControl>
