@@ -34,6 +34,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import GenerateProjectButton from "./_components/GenerateProjectButton";
 
 const ProjectsForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) => {
   const form = useForm<ProjectsValues>({
@@ -178,6 +179,12 @@ const ProjectsItem = ({ form, index, remove, id }: ProjectsItemProps) => {
     >
       <div className="flex justify-between gap-2">
         <span className="font-semibold">Project {index + 1}</span>
+        <GenerateProjectButton 
+  onGenerate={(project) => {
+    // Add the generated project to your form
+    form.setValue(`projects.${index}`, project);
+  }}
+/>
         <div className="flex items-center gap-6">
           <Button
             variant={"destructive"}
