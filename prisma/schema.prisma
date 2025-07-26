@@ -56,7 +56,7 @@ model Experience {
   description String[] @default([])
   
   resumeId String
-  resume Resume @relation(fields: [resumeId], references: [id])
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("experiences")
@@ -71,7 +71,7 @@ model Education {
   endDate DateTime?
 
   resumeId String
-  resume Resume @relation(fields: [resumeId], references: [id])
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("educations")
@@ -86,7 +86,7 @@ model Project {
   endDate DateTime?
 
   resumeId String
-  resume Resume @relation(fields: [resumeId], references: [id])
+  resume Resume @relation(fields: [resumeId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("projects")
