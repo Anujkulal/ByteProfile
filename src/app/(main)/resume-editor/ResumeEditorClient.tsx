@@ -2,8 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import {
+  AlertCircle,
   ArrowLeftCircle,
   ArrowRightCircle,
+  BookmarkCheck,
   CircleX,
   FileUserIcon,
   Loader,
@@ -19,20 +21,28 @@ import { ResumeValues } from "@/lib/resumeSchema";
 import ResumePreviewSection from "./ResumePreviewSection";
 import ColorPicker from "@/components/home/ColorPicker";
 import BorderStyleButton from "@/components/home/BorderStyle";
-import { cn } from "@/lib/utils";
+import { cn, mapToResumeValues } from "@/lib/utils";
 import useUnloadWarning from "@/hooks/useUnloadWarning";
 import useAutoSave from "@/hooks/useAutoSave";
 import ResumeTemplates from "./ResumeTemplates";
 import { templates } from "./templates";
 import { useReactToPrint } from "react-to-print";
+import { ResumeServerData } from "@/lib/types";
 
-const ResumeEditorClient = () => {
+interface ResumeEditorProps {
+  resumeToEdit: ResumeServerData | null;
+}
+
+const ResumeEditorClient = ({resumeToEdit}: ResumeEditorProps) => {
   const searchParams = useSearchParams();
-  const [resumeData, setResumeData] = useState<ResumeValues>({});
+  const [resumeData, setResumeData] = useState<ResumeValues>(
+    resumeToEdit ? mapToResumeValues(resumeToEdit) : {},
+  );
+
   const [showSmallScreenPreview, setShowSmallScreenPreview] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(templates[0].key);
 
-  const { isSaving, hasUnsavedChanges } = useAutoSave(resumeData);
+  const { isSaving, isError, hasUnsavedChanges } = useAutoSave(resumeData);
   useUnloadWarning(hasUnsavedChanges);
 
   const currentStep = searchParams.get("step") || steps[0].key;
@@ -90,11 +100,6 @@ const ResumeEditorClient = () => {
   return (
     <div className="flex grow flex-col">
       <div className="flex items-center justify-center gap-10 p-3">
-        <Button variant={"destructive"} className="rounded-full hidden sm:block" asChild>
-          <Link href={"/resumes"}>
-            <CircleX />
-          </Link>
-        </Button>
         <ResumeBreadCrumbs currentStep={currentStep} setCurrentStep={setStep} />
         <div className="flex items-center gap-2">
           <ColorPicker
@@ -129,8 +134,8 @@ const ResumeEditorClient = () => {
           >
             <Printer size={16} />
           </Button>
-        <span className={cn("text-muted-foreground opacity-0", isSaving && "opacity-100")}>
-          {/* Saving... */} <Loader className={cn("", isSaving && "animate-spin")} />
+        <span className={cn("text-muted-foreground", isSaving && "opacity-100")}>
+          {/* Saving... */} {isSaving ? <Loader className={cn("", isSaving && "animate-spin")} /> : isError ? <AlertCircle className="text-red-500"/> : <BookmarkCheck className="text-green-500" />}
         </span>
         </div>
       </div>
