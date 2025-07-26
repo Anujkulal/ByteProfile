@@ -44,16 +44,20 @@ const HobbiesForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) => {
                     <FormLabel>Hobbies</FormLabel>
                     <FormControl>
                       <Textarea
-                        {...field}
-                        placeholder="..."
-                        onChange={(e) => {
-                            const hobbies = e.target.value.split(",");
-                            field.onChange(hobbies);
-                        }}
+                        placeholder="Enter each point on a new line..."
+                value={
+                  Array.isArray(field.value)
+                    ? field.value.join("\n")
+                    : field.value || ""
+                }
+                onChange={(e) => {
+                  const hobbies = e.target.value.split("\n");
+                  field.onChange(hobbies);
+                }}
                         autoFocus
                       />
                     </FormControl>
-                    <FormDescription>List your hobbies separated by commas</FormDescription>
+                    <FormDescription>Each line will be treated as a separate bullet point</FormDescription>
                   </FormItem>
                 )}
               />
