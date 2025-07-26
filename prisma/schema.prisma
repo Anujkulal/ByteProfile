@@ -53,7 +53,7 @@ model Experience {
   organization String?
   startDate DateTime?
   endDate DateTime?
-  description String?
+  description String[] @default([])
   
   resumeId String
   resume Resume @relation(fields: [resumeId], references: [id])
