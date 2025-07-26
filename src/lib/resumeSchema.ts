@@ -62,7 +62,7 @@ export const ExperienceSchema = z.object({
         organization: optionalString,
         startDate: optionalString,
         endDate: optionalString,
-        description: optionalString,
+        description: z.array(z.string().trim()).optional(),
       }),
     )
     .optional(),
