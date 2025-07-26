@@ -1,32 +1,42 @@
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea';
-import { AchievementsSchema, AchievementsValues } from '@/lib/resumeSchema';
-import { ResumeEditorFormProps } from '@/lib/types';
-import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect } from 'react'
-import { useForm } from 'react-hook-form';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import { AchievementsSchema, AchievementsValues } from "@/lib/resumeSchema";
+import { ResumeEditorFormProps } from "@/lib/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
-const AchievementsForm = ({resumeData, setResumeData}: ResumeEditorFormProps) => {
+const AchievementsForm = ({
+  resumeData,
+  setResumeData,
+}: ResumeEditorFormProps) => {
   const form = useForm<AchievementsValues>({
-      resolver: zodResolver(AchievementsSchema),
-      defaultValues: {
-        achievements: resumeData.achievements || [],
-      },
-    });
-  
-    useEffect(() => {
-      const subscription = form.watch((values) => {
-        setResumeData({
-          ...resumeData,
-          achievements:
-            values.achievements
-              ?.filter((achievement) => achievement != undefined)
-              .map((achievement) => achievement.trim())
-              .filter((achievement) => achievement !== "") || [],
-        });
+    resolver: zodResolver(AchievementsSchema),
+    defaultValues: {
+      achievements: resumeData.achievements || [],
+    },
+  });
+
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      setResumeData({
+        ...resumeData,
+        achievements:
+          values.achievements
+            ?.filter((achievement) => achievement != undefined)
+            .map((achievement) => achievement.trim())
+            .filter((achievement) => achievement !== "") || [],
       });
-      return () => subscription.unsubscribe();
-    }, [form.watch, setResumeData]);
+    });
+    return () => subscription.unsubscribe();
+  }, [form]);
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div className="space-y-1.5 text-center">
@@ -43,23 +53,29 @@ const AchievementsForm = ({resumeData, setResumeData}: ResumeEditorFormProps) =>
                 <FormLabel>Achievements</FormLabel>
                 <FormControl>
                   <Textarea
-                    {...field}
-                    placeholder="..."
+                    placeholder="Enter each point on a new line..."
+                    value={
+                      Array.isArray(field.value)
+                        ? field.value.join("\n")
+                        : field.value || ""
+                    }
                     onChange={(e) => {
-                        const achievements = e.target.value.split(",");
-                        field.onChange(achievements);
+                      const achievements = e.target.value.split("\n");
+                      field.onChange(achievements);
                     }}
                     autoFocus
                   />
                 </FormControl>
-                <FormDescription>List your achievements separated by commas</FormDescription>
+                <FormDescription>
+                  Each line will be treated as a separate bullet point
+                </FormDescription>
               </FormItem>
             )}
           />
         </form>
       </Form>
     </div>
-  )
-}
+  );
+};
 
-export default AchievementsForm
+export default AchievementsForm;
