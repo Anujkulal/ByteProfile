@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function mapToResumeValues(data: ResumeServerData): ResumeValues {
-  console.log("Mapping ResumeServerData to ResumeValues:", data);
+  // console.log("Mapping ResumeServerData to ResumeValues:", data);
   return {
     id: data.id,
     title: data.title || undefined,
