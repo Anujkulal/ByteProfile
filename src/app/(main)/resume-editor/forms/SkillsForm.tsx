@@ -38,8 +38,7 @@ const SkillsForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) => {
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div className="space-y-1.5 text-center">
-        <h2 className="text-2xl font-semibold">Skills Info</h2>
-        <p className="text-muted-foreground text-sm">Add your skills</p>
+        <h2 className="text-2xl font-semibold">Skills Information</h2>
       </div>
       <Form {...form}>
         <form className="space-y-3">
