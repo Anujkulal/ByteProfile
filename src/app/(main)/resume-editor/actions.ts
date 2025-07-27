@@ -15,7 +15,7 @@ export async function saveResumeData(values: ResumeValues) {
 
   const { id } = values;
 
-  console.log("Received values: ", values);
+  // console.log("Received values: ", values);
 
   const { photo, experiences, educations, projects, ...resumesValues } =
     ResumeSchema.parse(values);
@@ -24,7 +24,7 @@ export async function saveResumeData(values: ResumeValues) {
     ? await prisma.resume.findUnique({ where: { id, userId } })
     : null;
 
-    console.log("Existing resume: ", existingResume);
+    // console.log("Existing resume: ", existingResume);
 
   if (id && !existingResume) {
     throw new Error("Resume not found");
