@@ -24,7 +24,7 @@ const Navbar = () => {
     <header className="">
       <div className="mx-auto flex max-w-7xl items-center justify-between p-2">
         <div className="flex justify-between gap-4">
-          <Link href={"/resumes"} className="flex items-center gap-2">
+          <Link href={"/"} className="flex items-center gap-2">
             <Image
               src={logo}
               alt="Logo"
