@@ -93,10 +93,7 @@ const ProjectsForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) => {
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div className="space-y-1.5 text-center">
-        <h2 className="text-2xl font-semibold">Projects Info</h2>
-        <p className="text-muted-foreground text-sm">
-          Add your project details
-        </p>
+        <h2 className="text-2xl font-semibold">Projects Information</h2>
       </div>
       <Form {...form}>
         <form className="space-y-3">
@@ -179,12 +176,12 @@ const ProjectsItem = ({ form, index, remove, id }: ProjectsItemProps) => {
     >
       <div className="flex justify-between gap-2">
         <span className="font-semibold">Project {index + 1}</span>
-        <GenerateProjectButton 
-  onGenerate={(project) => {
-    // Add the generated project to your form
-    form.setValue(`projects.${index}`, project);
-  }}
-/>
+        <GenerateProjectButton
+          onGenerate={(project) => {
+            // Add the generated project to your form
+            form.setValue(`projects.${index}`, project);
+          }}
+        />
         <div className="flex items-center gap-6">
           <Button
             variant={"destructive"}
@@ -214,27 +211,31 @@ const ProjectsItem = ({ form, index, remove, id }: ProjectsItemProps) => {
         )}
       />
       <FormField
-  control={form.control}
-  name={`projects.${index}.description`}
-  render={({ field }) => (
-    <FormItem>
-      <FormLabel>Description</FormLabel>
-      <FormControl>
-        <Textarea 
-          placeholder="Enter each point on a new line..."
-          value={Array.isArray(field.value) ? field.value.join('\n') : field.value || ''}
-          onChange={(e) => {
-            const description = e.target.value.split('\n');
-            field.onChange(description);
-          }}
-        />
-      </FormControl>
-      <FormDescription>
-        Each line will be treated as a separate bullet point
-      </FormDescription>
-    </FormItem>
-  )}
-/>
+        control={form.control}
+        name={`projects.${index}.description`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Description</FormLabel>
+            <FormControl>
+              <Textarea
+                placeholder="Enter each point on a new line..."
+                value={
+                  Array.isArray(field.value)
+                    ? field.value.join("\n")
+                    : field.value || ""
+                }
+                onChange={(e) => {
+                  const description = e.target.value.split("\n");
+                  field.onChange(description);
+                }}
+              />
+            </FormControl>
+            <FormDescription>
+              Each line will be treated as a separate bullet point
+            </FormDescription>
+          </FormItem>
+        )}
+      />
       <FormField
         control={form.control}
         name={`projects.${index}.url`}
