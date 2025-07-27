@@ -42,5 +42,4 @@ next-env.d.ts
 
 .env*
 installation*
-README.md
 /src/generated/prisma
