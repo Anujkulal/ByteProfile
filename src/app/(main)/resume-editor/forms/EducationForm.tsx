@@ -83,10 +83,7 @@ const EducationForm = ({
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div className="space-y-1.5 text-center">
-        <h2 className="text-2xl font-semibold">Education Info</h2>
-        <p className="text-muted-foreground text-sm">
-          Add your education details
-        </p>
+        <h2 className="text-2xl font-semibold">Educational Information</h2>
       </div>
       <Form {...form}>
         <form className="space-y-3">
@@ -253,11 +250,6 @@ const EducationItem = ({ form, index, remove, id }: EducationItemProps) => {
           )}
         />
       </div>
-      <FormDescription>
-        {" "}
-        Leave <span className="font-semibold">End Date</span> empty if you are
-        currently enrolled
-      </FormDescription>
     </div>
   );
 };
