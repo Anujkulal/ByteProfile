@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ResumeEditorFormProps } from "@/lib/types";
+import FetchGithubDataButton from "./_components/FetchGithubDataButton";
 
 const GeneralInfoForm = ({
   resumeData,
@@ -60,11 +61,11 @@ const GeneralInfoForm = ({
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Project description</FormLabel>
+                <FormLabel>About Resume</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder="A brief description of my resume"
+                    placeholder="A brief description of your resume"
                   />
                 </FormControl>
                 <FormMessage />
@@ -73,6 +74,7 @@ const GeneralInfoForm = ({
           />
         </form>
       </Form>
+      <FetchGithubDataButton resumeData={resumeData} setResumeData={setResumeData}  />
     </div>
   );
 };
