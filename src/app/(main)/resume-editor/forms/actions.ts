@@ -1,6 +1,5 @@
 "use server";
 
-import { Experience } from "@/generated/prisma";
 import openai from "@/lib/openai";
 import {
   ExperienceValues,
@@ -59,8 +58,8 @@ export async function generateSummary(prompt: GenerateSummaryInput) {
       ${skills}
     `;
 
-    console.log("systemMessage", systemMessage);
-    console.log("userMessage", userMessage);
+    // console.log("systemMessage", systemMessage);
+    // console.log("userMessage", userMessage);
 
     const completion = await openai.chat.completions.create({
       model: "mistralai/mistral-7b-instruct:free", // Use the correct model name
@@ -82,7 +81,7 @@ export async function generateSummary(prompt: GenerateSummaryInput) {
       throw new Error("AI response is empty");
     }
 
-    console.log("AI Response:", aiResponse);
+    // console.log("AI Response:", aiResponse);
 
     return aiResponse;
   } catch (err) {
