@@ -11,6 +11,7 @@ import {
   GenerateSummaryInput,
   generateSummarySchema,
 } from "@/lib/resumeSchema";
+import { GitHubApiResponse } from "@/lib/types";
 import { auth } from "@clerk/nextjs/server";
 
 export async function generateSummary(prompt: GenerateSummaryInput) {
@@ -250,5 +251,56 @@ Make the description compelling and technical, focusing on implementation detail
   } catch (error) {
     console.error("Error generating project:", error);
     throw new Error("Failed to generate project");
+  }
+}
+
+export async function fetchGitHubDataByUsername(username: string) {
+  try {
+    const { userId } = await auth();
+    if (!userId) {
+      throw new Error("User not authenticated");
+    }
+
+    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+
+    // console.log("URL: ", baseApiUrl)
+    const response = await fetch(`${baseUrl}/api/github?username=${username}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.CLERK_SECRET_KEY}`,
+      },
+      cache: "no-store", // Disable caching for this request
+    });
+
+    // console.log("Username:", username);
+
+    console.log("Response:: ", response);
+    console.log("Response headers:", Object.fromEntries(response.headers.entries()));
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      // console.log("Error response text:", errorText);
+      
+      // Handle HTML error pages
+      if (errorText.includes('<!DOCTYPE')) {
+        throw new Error('API route not found or not accessible');
+      }
+      
+      let errorData;
+      try {
+        errorData = JSON.parse(errorText);
+      } catch {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
+      throw new Error(errorData.message || "Failed to fetch GitHub data");
+    }
+
+    const data: GitHubApiResponse = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching GitHub data:", error);
+    throw error;
   }
 }
