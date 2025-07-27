@@ -25,6 +25,7 @@ interface FetchGithubDataButtonProps {
 
 const FetchGithubDataButton = ({ resumeData, setResumeData }: FetchGithubDataButtonProps) => {
   const { user } = useUser();
+  console.log("Current user:", user);
   const [username, setUsername] = useState(user?.username || '');
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
