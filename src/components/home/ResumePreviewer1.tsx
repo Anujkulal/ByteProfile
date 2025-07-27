@@ -12,6 +12,7 @@ interface ResumePreviewerProps {
   className?: string;
   contentRef?: React.Ref<HTMLDivElement>;
   printRef?: React.RefObject<HTMLDivElement | null>;
+  enableClickableLinks?: boolean;
 }
 
 const ResumePreviewer1 = ({
@@ -19,6 +20,7 @@ const ResumePreviewer1 = ({
   className,
   contentRef,
   printRef,
+  enableClickableLinks = false,
 }: ResumePreviewerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { width } = useDimension(containerRef);
@@ -47,11 +49,11 @@ const ResumePreviewer1 = ({
         ref={mergeRefs}
         id="resumePreviewContent"
       >
-        <PersonalInfo resumeData={resumeData} />
+        <PersonalInfo resumeData={resumeData} enableClickableLinks={enableClickableLinks}/>
         <SummaryInfo resumeData={resumeData} />
         <EducationInfo resumeData={resumeData} />
         <ExperienceInfo resumeData={resumeData} />
-        <ProjectsInfo resumeData={resumeData} />
+        <ProjectsInfo resumeData={resumeData} enableClickableLinks={enableClickableLinks}/>
         <AchievementsInfo resumeData={resumeData} />
         <SkillsInfo resumeData={resumeData} />
         <HobbiesInfo resumeData={resumeData} />
@@ -63,6 +65,7 @@ const ResumePreviewer1 = ({
 interface ResumeSectionProps {
   resumeData: ResumeValues;
   className?: string;
+  enableClickableLinks?: boolean;
 }
 
 const SectionTitle = ({
@@ -80,7 +83,7 @@ const SectionTitle = ({
   </>
 );
 
-const PersonalInfo = ({ resumeData, className }: ResumeSectionProps) => {
+const PersonalInfo = ({ resumeData, className, enableClickableLinks=false }: ResumeSectionProps) => {
   const {
     photo,
     firstName,
@@ -155,6 +158,7 @@ const PersonalInfo = ({ resumeData, className }: ResumeSectionProps) => {
               {contactItems.map((item, idx) => (
                 <React.Fragment key={idx}>
                   {idx > 0 && " | "}
+                  {enableClickableLinks ? (
                   <a
                     href={item === email ? `mailto:${item}` : item === phone ? `tel:${item}` : item}
                     target="_blank"
@@ -163,6 +167,12 @@ const PersonalInfo = ({ resumeData, className }: ResumeSectionProps) => {
                   >
                     {item}
                   </a>
+
+                  ) : (
+                    <span className="cursor-default text-gray-600">
+                      {item}
+                    </span>
+                  )}
                 </React.Fragment>
               ))}
             </span>
@@ -253,7 +263,7 @@ const EducationInfo = ({ resumeData }: ResumeSectionProps) => {
   );
 };
 
-const ProjectsInfo = ({ resumeData }: ResumeSectionProps) => {
+const ProjectsInfo = ({ resumeData, enableClickableLinks=false }: ResumeSectionProps) => {
   const { projects, colorHex } = resumeData;
   if (!projects?.length) return null;
 
@@ -264,7 +274,7 @@ const ProjectsInfo = ({ resumeData }: ResumeSectionProps) => {
         <div key={i} className="space-y-1">
           <div className="flex items-center justify-between">
             <h4 className=" font-semibold">
-              {project.url ? (
+              {project.url && enableClickableLinks ? (
                 <a
                   href={project.url}
                   target="_blank"
