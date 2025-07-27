@@ -42,7 +42,7 @@ const ResumeEditorClient = ({resumeToEdit}: ResumeEditorProps) => {
   const [showSmallScreenPreview, setShowSmallScreenPreview] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(templates[0].key);
 
-  const { isSaving, isError, hasUnsavedChanges } = useAutoSave(resumeData);
+  const { isSaving, isError, hasUnsavedChanges, forceSave } = useAutoSave(resumeData);
   useUnloadWarning(hasUnsavedChanges);
 
   const currentStep = searchParams.get("step") || steps[0].key;
@@ -135,7 +135,7 @@ const ResumeEditorClient = ({resumeToEdit}: ResumeEditorProps) => {
             <Printer size={16} />
           </Button>
         <span className={cn("text-muted-foreground", isSaving && "opacity-100")}>
-          {/* Saving... */} {isSaving ? <Loader className={cn("", isSaving && "animate-spin")} /> : isError ? <AlertCircle className="text-red-500"/> : <BookmarkCheck className="text-green-500" />}
+          {/* Saving... */} {isSaving ? <Loader className={cn("", isSaving && "animate-spin")} /> : isError ?<Button onClick={forceSave}><AlertCircle className="text-red-500"/></Button>  : <BookmarkCheck className="text-green-500" />}
         </span>
         </div>
       </div>
