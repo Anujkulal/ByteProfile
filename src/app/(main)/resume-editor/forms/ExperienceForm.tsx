@@ -94,10 +94,7 @@ const ExperienceForm = ({
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div className="space-y-1.5 text-center">
-        <h2 className="text-2xl font-semibold">Experience</h2>
-        <p className="text-muted-foreground text-sm">
-          Add your work experience
-        </p>
+        <h2 className="text-2xl font-semibold">Experience Details</h2>
       </div>
       <Form {...form}>
         <form className="space-y-3">
