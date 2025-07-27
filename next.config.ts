@@ -10,6 +10,13 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['9crqdg7mwmvph862.public.blob.vercel-storage.com'],
   },
+  eslint: {
+    ignoreDuringBuilds: false,
+    dirs: ['src', 'app'], // Only lint these directories
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
 };
 
 export default nextConfig;
