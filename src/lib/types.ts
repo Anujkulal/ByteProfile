@@ -3,9 +3,8 @@ import { ResumeValues } from "./resumeSchema";
 
 export interface ResumeEditorFormProps {
     resumeData: ResumeValues;
-    setResumeData: (data: ResumeValues) => void;
+    setResumeData: React.Dispatch<React.SetStateAction<ResumeValues>>;
 }
-
 
 export const resumeDataInclude = {
   experiences: true,
