@@ -58,7 +58,7 @@ const Home = (props: Props) => {
               customize with beautiful templates, and land your dream job.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link href="/resume-editor">
+              <Link href="/resumes">
                 <Button size="lg" className="text-lg px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-300">
                   Start Building Free
                   <ArrowRight className="ml-2 h-5 w-5" />
