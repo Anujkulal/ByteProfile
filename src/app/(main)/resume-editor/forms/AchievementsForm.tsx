@@ -40,8 +40,7 @@ const AchievementsForm = ({
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div className="space-y-1.5 text-center">
-        <h2 className="text-2xl font-semibold">Achievements Info</h2>
-        <p className="text-muted-foreground text-sm">Add your achievements</p>
+        <h2 className="text-2xl font-semibold">Achievements Information</h2>
       </div>
       <Form {...form}>
         <form className="space-y-3">
