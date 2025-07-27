@@ -59,7 +59,7 @@ const SummaryForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) => {
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div className="space-y-1.5 text-center">
-        <h2 className="text-2xl font-semibold">Summary</h2>
+        <h2 className="text-2xl font-semibold">Summary Details</h2>
         <p className="text-muted-foreground text-sm">
           Write a brief summary of your professional background and skills or
           generate using AI.
