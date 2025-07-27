@@ -102,7 +102,7 @@ const PersonalInfoForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) 
                 <FormItem>
                     <FormLabel>First Name</FormLabel>
                     <FormControl>
-                        <Input {...field} placeholder="Anuj" />
+                        <Input {...field} placeholder="John" />
                     </FormControl>
                     <FormMessage />
                 </FormItem>
@@ -115,7 +115,7 @@ const PersonalInfoForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) 
                 <FormItem>
                     <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                        <Input {...field} placeholder="Kulal" />
+                        <Input {...field} placeholder="Doe" />
                     </FormControl>
                     <FormMessage />
                 </FormItem>
