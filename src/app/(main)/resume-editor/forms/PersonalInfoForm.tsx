@@ -11,10 +11,13 @@ import { Input } from "@/components/ui/input";
 import { personalInfoSchema, personalInfoValues } from "@/lib/resumeSchema";
 import { ResumeEditorFormProps } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const PersonalInfoForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) => {
+  const [isUploading, setIsUploading] = useState(false);
+
   const form = useForm<personalInfoValues>({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
@@ -28,17 +31,10 @@ const PersonalInfoForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) 
       linkedInUrl: resumeData.linkedInUrl || "",
       githubUrl: resumeData.githubUrl || "",
       websiteUrl: resumeData.websiteUrl || "",
-    },
+      },
   });
 
   useEffect(() => {
-    // const { unsubscribe } = form.watch(async () => {
-    //   const isValid = await form.trigger();
-    //   console.log("Form is valid:", isValid);
-    //   if (!isValid) return;
-    // });
-    // return unsubscribe;
-
     const subscription = form.watch((values) => {
     setResumeData({...resumeData, ...values})
   });
@@ -50,7 +46,57 @@ const PersonalInfoForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) 
 
   const photoInputUrl = useRef<HTMLInputElement>(null);
 
-  
+  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>, onChange: (value: File | null) => void) => {
+    const file = e.target.files?.[0];
+    
+    if (!file) {
+      onChange(null);
+      return;
+    }
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select a valid image file');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      toast.error('Image size should be less than 5MB');
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      
+      // Create a preview URL for immediate feedback
+      const previewUrl = URL.createObjectURL(file);
+      
+      // Update form with the file
+      onChange(file);
+      
+      toast.success('Photo uploaded successfully');
+    } catch (error) {
+      console.error('Error handling photo:', error);
+      toast.error('Failed to upload photo. Please try again.');
+      onChange(null);
+      if (photoInputUrl.current) {
+        photoInputUrl.current.value = "";
+      }
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // const handleRemovePhoto = (onChange: (value: File | null) => void) => {
+  //   onChange(null);
+  //   if (photoInputUrl.current) {
+  //     photoInputUrl.current.value = "";
+  //   }
+  //   toast.success('Photo removed');
+  // };
+
 
   return (
     <div className="mx-auto max-w-xl space-y-6">
