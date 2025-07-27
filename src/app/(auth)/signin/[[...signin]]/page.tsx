@@ -4,7 +4,9 @@ import React from 'react'
 const SigninPage = () => {
   return (
     <main className='h-screen flex items-center justify-center p-2'>
-        <SignIn />
+        <SignIn 
+        fallbackRedirectUrl="/resumes"
+        />
     </main>
   )
 }
