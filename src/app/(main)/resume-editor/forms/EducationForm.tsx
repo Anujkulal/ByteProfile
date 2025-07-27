@@ -210,7 +210,7 @@ const EducationItem = ({ form, index, remove, id }: EducationItemProps) => {
         name={`educations.${index}.fieldOfStudy`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Field of Study</FormLabel>
+            <FormLabel>Branch / Course</FormLabel>
             <FormControl>
               <Input {...field} />
             </FormControl>
