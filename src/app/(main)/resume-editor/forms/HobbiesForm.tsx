@@ -31,8 +31,7 @@ const HobbiesForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) => {
   return (
     <div className="mx-auto max-w-xl space-y-6">
           <div className="space-y-1.5 text-center">
-            <h2 className="text-2xl font-semibold">Hobbies Info</h2>
-            <p className="text-muted-foreground text-sm">Mention your hobbies</p>
+            <h2 className="text-2xl font-semibold">Hobbies Information</h2>
           </div>
           <Form {...form}>
             <form className="space-y-3">
