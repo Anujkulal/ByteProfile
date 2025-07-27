@@ -24,8 +24,6 @@ const useAutoSave = (
 ): UseAutoSaveReturn => {
   const { debounceDelay = 1500, enabled = true } = options;
 
-  // console.log("useAutoSave called with resumeData:", resumeData);
-
   const debouncedResumeData = useDebounce(resumeData, debounceDelay);
   const searchParams = useSearchParams();
 
@@ -48,7 +46,46 @@ const useAutoSave = (
     }
   }, []);
 
-  // Save function with simplified error handling
+  // Helper function to compare photos properly (updated to handle undefined)
+  const arePhotosEqual = (
+    photo1: File | string | null | undefined,
+    photo2: File | string | null | undefined,
+  ): boolean => {
+    // Both are null or undefined (treat null and undefined as equivalent)
+    if (
+      (photo1 === null || photo1 === undefined) && 
+      (photo2 === null || photo2 === undefined)
+    ) {
+      return true;
+    }
+
+    // One is null/undefined, other is not
+    if (
+      (photo1 === null || photo1 === undefined) || 
+      (photo2 === null || photo2 === undefined)
+    ) {
+      return false;
+    }
+
+    // Both are strings (URLs)
+    if (typeof photo1 === "string" && typeof photo2 === "string") {
+      return photo1 === photo2;
+    }
+
+    // Both are File objects
+    if (photo1 instanceof File && photo2 instanceof File) {
+      return (
+        photo1.name === photo2.name &&
+        photo1.size === photo2.size &&
+        photo1.lastModified === photo2.lastModified
+      );
+    }
+
+    // Mixed types (File vs string) - consider them different
+    return false;
+  };
+
+  // Save function with proper photo handling
   const saveResume = useCallback(
     async (
       dataToSave: ResumeValues,
@@ -67,12 +104,21 @@ const useAutoSave = (
 
         const newData = structuredClone(dataToSave);
 
-        // Optimize photo upload - don't re-upload if unchanged
-        const shouldSkipPhoto =
-          lastSavedData.photo?.toString() === newData.photo?.toString();
+        // Better photo comparison - skip upload only if photos are truly identical
+        const shouldSkipPhoto = arePhotosEqual(
+          lastSavedData.photo,
+          newData.photo,
+        );
+
+        console.log("Photo comparison:", {
+          lastSavedPhoto: lastSavedData.photo,
+          newPhoto: newData.photo,
+          shouldSkip: shouldSkipPhoto,
+        });
 
         const updatedResume = await saveResumeData({
           ...newData,
+          // Only skip photo if they're truly identical, otherwise let the server handle it
           ...(shouldSkipPhoto && { photo: undefined }),
           id: currentResumeId,
         });
@@ -125,14 +171,25 @@ const useAutoSave = (
     }
   }, [enabled, isSaving, resumeData, resumeId, saveResume]);
 
-  // Auto-save effect
+  // Auto-save effect with better comparison
   useEffect(() => {
     if (!enabled) return;
 
-    const hasUnsavedChanges =
-      JSON.stringify(debouncedResumeData) !== JSON.stringify(lastSavedData);
+    // Create a comparison object without the photo for general changes
+    const { photo: lastPhoto, ...lastDataWithoutPhoto } = lastSavedData;
+    const { photo: currentPhoto, ...currentDataWithoutPhoto } = debouncedResumeData;
+
+    const hasGeneralChanges =
+      JSON.stringify(currentDataWithoutPhoto) !==
+      JSON.stringify(lastDataWithoutPhoto);
+    const hasPhotoChanges = !arePhotosEqual(lastPhoto, currentPhoto);
+    const hasUnsavedChanges = hasGeneralChanges || hasPhotoChanges;
 
     if (hasUnsavedChanges && debouncedResumeData && !isSaving && !isError) {
+      console.log("Auto-saving due to changes:", {
+        hasGeneralChanges,
+        hasPhotoChanges,
+      });
       saveResume(debouncedResumeData, resumeId);
     }
   }, [
@@ -150,9 +207,14 @@ const useAutoSave = (
     return cleanup;
   }, [cleanup]);
 
-  // Calculate unsaved changes
-  const hasUnsavedChanges =
-    JSON.stringify(resumeData) !== JSON.stringify(lastSavedData);
+  // Calculate unsaved changes with proper photo comparison
+  const { photo: lastPhoto, ...lastDataWithoutPhoto } = lastSavedData;
+  const { photo: currentPhoto, ...currentDataWithoutPhoto } = resumeData;
+
+  const hasGeneralChanges =
+    JSON.stringify(currentDataWithoutPhoto) !== JSON.stringify(lastDataWithoutPhoto);
+  const hasPhotoChanges = !arePhotosEqual(lastPhoto, currentPhoto);
+  const hasUnsavedChanges = hasGeneralChanges || hasPhotoChanges;
 
   return {
     isSaving,
