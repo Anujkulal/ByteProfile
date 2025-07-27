@@ -36,7 +36,7 @@ const AchievementsForm = ({
       });
     });
     return () => subscription.unsubscribe();
-  }, [form]);
+  }, [form.watch, setResumeData]);
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <div className="space-y-1.5 text-center">
