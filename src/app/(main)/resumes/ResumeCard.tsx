@@ -105,6 +105,7 @@ const ResumeCard = ({ resume }: ResumeItemProps) => {
               resumeData={mapToResumeValues(resume)}
               contentRef={contentRef}
               className="transition-transform duration-300 group-hover:scale-[1.02]"
+              enableClickableLinks={false}
             />
             
             {/* Gradient Overlay */}
