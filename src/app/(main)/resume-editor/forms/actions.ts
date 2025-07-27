@@ -107,7 +107,7 @@ Position: <job title/position>
 Organization: <company name or organization>
 Start date: <format: YYYY-MM-DD> (only if provided or can be reasonably inferred)
 End date: <format: YYYY-MM-DD> (only if provided or can be reasonably inferred)
-Description: <optimized description, each description is on a new line. Focus on achievements, responsibilities, and impact using action verbs and quantifiable results when possible>
+Description: <optimized description, each description key point on a new line without bullet points. Focus on achievements, responsibilities, and impact using action verbs and quantifiable results when possible>
 
 Guidelines:
 - Use strong action verbs (developed, implemented, managed, increased, etc.)
@@ -386,7 +386,7 @@ export async function fetchGitHubDataByUsername(username: string) {
       topRepos = Array.isArray(reposData) 
         ? reposData
             .filter(repo => !repo.fork && !repo.archived) // Exclude forks and archived repos
-            .slice(0, 6) // Limit to top 6
+            .slice(0, 3) // Limit to top 3 repositories
         : [];
 
       console.log(`Successfully fetched ${topRepos.length} repositories`);
