@@ -253,6 +253,58 @@ Make the description compelling and technical, focusing on implementation detail
   }
 }
 
+// export async function fetchGitHubDataByUsername(username: string) {
+//   try {
+//     const { userId } = await auth();
+//     if (!userId) {
+//       throw new Error("User not authenticated");
+//     }
+
+//     const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+
+//     // console.log("URL: ", baseApiUrl)
+//     const response = await fetch(`${baseUrl}/api/github?username=${username}`, {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//         "Authorization": `Bearer ${process.env.CLERK_SECRET_KEY}`,
+//       },
+//       cache: "no-store", // Disable caching for this request
+//     });
+
+//     // console.log("Username:", username);
+
+//     console.log("Response:: ", response);
+//     console.log("Response headers:", Object.fromEntries(response.headers.entries()));
+
+//     if (!response.ok) {
+//       const errorText = await response.text();
+//       // console.log("Error response text:", errorText);
+      
+//       // Handle HTML error pages
+//       if (errorText.includes('<!DOCTYPE')) {
+//         throw new Error('API route not found or not accessible');
+//       }
+      
+//       let errorData;
+//       try {
+//         errorData = JSON.parse(errorText);
+//       } catch {
+//         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+//       }
+      
+//       throw new Error(errorData.message || "Failed to fetch GitHub data");
+//     }
+
+//     const data: GitHubApiResponse = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error("Error fetching GitHub data:", error);
+//     throw error;
+//   }
+// }
+
+
 export async function fetchGitHubDataByUsername(username: string) {
   try {
     const { userId } = await auth();
@@ -260,46 +312,122 @@ export async function fetchGitHubDataByUsername(username: string) {
       throw new Error("User not authenticated");
     }
 
-    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    console.log("Fetching GitHub data for username:", username);
 
-    // console.log("URL: ", baseApiUrl)
-    const response = await fetch(`${baseUrl}/api/github?username=${username}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.CLERK_SECRET_KEY}`,
-      },
-      cache: "no-store", // Disable caching for this request
-    });
-
-    // console.log("Username:", username);
-
-    console.log("Response:: ", response);
-    console.log("Response headers:", Object.fromEntries(response.headers.entries()));
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      // console.log("Error response text:", errorText);
-      
-      // Handle HTML error pages
-      if (errorText.includes('<!DOCTYPE')) {
-        throw new Error('API route not found or not accessible');
-      }
-      
-      let errorData;
-      try {
-        errorData = JSON.parse(errorText);
-      } catch {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-      
-      throw new Error(errorData.message || "Failed to fetch GitHub data");
+    if (!username || username.trim().length === 0) {
+      throw new Error("Username is required");
     }
 
-    const data: GitHubApiResponse = await response.json();
-    return data;
+    const cleanUsername = username.trim();
+
+    // Validate GitHub username format
+    if (!/^[a-zA-Z0-9]([a-zA-Z0-9]|-)*[a-zA-Z0-9]$/.test(cleanUsername)) {
+      throw new Error("Invalid GitHub username format");
+    }
+
+    // Check if GITHUB_TOKEN is available
+    if (!process.env.GITHUB_TOKEN) {
+      throw new Error("GitHub token not configured. Please add GITHUB_TOKEN to your environment variables.");
+    }
+
+    const headers = {
+      'Authorization': `token ${process.env.GITHUB_TOKEN}`,
+      'Accept': 'application/vnd.github.v3+json',
+      'User-Agent': 'ByteProfile-App'
+    };
+
+    // Fetch user data
+    console.log("Fetching user profile...");
+    const userResponse = await fetch(`https://api.github.com/users/${cleanUsername}`, {
+      headers,
+      cache: 'no-store'
+    });
+
+    if (!userResponse.ok) {
+      console.error(`GitHub API error: ${userResponse.status} ${userResponse.statusText}`);
+      
+      if (userResponse.status === 404) {
+        throw new Error(`GitHub user '${cleanUsername}' not found`);
+      }
+      if (userResponse.status === 403) {
+        const rateLimitReset = userResponse.headers.get('X-RateLimit-Reset');
+        const resetTime = rateLimitReset ? new Date(parseInt(rateLimitReset) * 1000) : null;
+        throw new Error(`GitHub API rate limit exceeded${resetTime ? `. Resets at ${resetTime.toLocaleTimeString()}` : '. Please try again later.'}`);
+      }
+      if (userResponse.status === 401) {
+        throw new Error("GitHub API authentication failed. Please check your token.");
+      }
+      
+      throw new Error(`GitHub API error: ${userResponse.status} ${userResponse.statusText}`);
+    }
+
+    const userData = await userResponse.json();
+    console.log("User data fetched successfully");
+
+    // Fetch repositories
+    console.log("Fetching repositories...");
+    const reposResponse = await fetch(
+      `https://api.github.com/users/${cleanUsername}/repos?sort=stars&direction=desc&per_page=10&type=owner`,
+      {
+        headers,
+        cache: 'no-store'
+      }
+    );
+
+    let topRepos = [];
+
+    if (!reposResponse.ok) {
+      console.warn(`Failed to fetch repositories: ${reposResponse.status} ${reposResponse.statusText}`);
+      // Continue with user data only if repos fail
+    } else {
+      const reposData = await reposResponse.json();
+      
+      // Filter and sort repositories
+      topRepos = Array.isArray(reposData) 
+        ? reposData
+            .filter(repo => !repo.fork && !repo.archived) // Exclude forks and archived repos
+            .slice(0, 6) // Limit to top 6
+        : [];
+
+      console.log(`Successfully fetched ${topRepos.length} repositories`);
+    }
+
+    // Return data in the expected format
+    const result = {
+      user: {
+        name: userData.name || '',
+        location: userData.location || '',
+        html_url: userData.html_url || '',
+        bio: userData.bio || '',
+        avatar_url: userData.avatar_url || '',
+        public_repos: userData.public_repos || 0,
+        followers: userData.followers || 0,
+        following: userData.following || 0,
+      },
+      topRepos: topRepos.map(repo => ({
+        name: repo.name || '',
+        html_url: repo.html_url || '',
+        description: repo.description || '',
+        language: repo.language || '',
+        stargazers_count: repo.stargazers_count || 0,
+        forks_count: repo.forks_count || 0,
+        topics: repo.topics || [],
+        created_at: repo.created_at || '',
+        pushed_at: repo.pushed_at || '',
+      }))
+    };
+
+    console.log("GitHub data processed successfully:", result);
+    return result;
+
   } catch (error) {
-    console.error("Error fetching GitHub data:", error);
-    throw error;
+    console.error("Error in fetchGitHubDataByUsername:", error);
+    
+    // Return more specific error messages
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    
+    throw new Error("Failed to fetch GitHub data. Please check the username and try again.");
   }
 }
