@@ -10,13 +10,11 @@ interface UseAutoSaveReturn {
   isError: boolean;
   hasUnsavedChanges: boolean;
   lastSavedAt: Date | null;
-  retryCount: number;
   forceSave: () => Promise<void>;
 }
 
 interface UseAutoSaveOptions {
   debounceDelay?: number;
-  maxRetries?: number;
   enabled?: boolean;
 }
 
@@ -24,7 +22,9 @@ const useAutoSave = (
   resumeData: ResumeValues,
   options: UseAutoSaveOptions = {},
 ): UseAutoSaveReturn => {
-  const { debounceDelay = 1500, maxRetries = 3, enabled = true } = options;
+  const { debounceDelay = 1500, enabled = true } = options;
+
+  // console.log("useAutoSave called with resumeData:", resumeData);
 
   const debouncedResumeData = useDebounce(resumeData, debounceDelay);
   const searchParams = useSearchParams();
@@ -37,33 +37,22 @@ const useAutoSave = (
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
   const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
-  const [retryCount, setRetryCount] = useState<number>(0);
 
-  // Refs for cleanup and consistency
-  const errorToastIdRef = useRef<string | number | null>(null);
-  const savingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // Refs for cleanup
   const abortControllerRef = useRef<AbortController | null>(null);
 
   // Cleanup function
   const cleanup = useCallback(() => {
-    if (savingTimeoutRef.current) {
-      clearTimeout(savingTimeoutRef.current);
-    }
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
-    if (errorToastIdRef.current) {
-      toast.dismiss(errorToastIdRef.current);
-      errorToastIdRef.current = null;
-    }
   }, []);
 
-  // Save function with proper error handling and retry logic
+  // Save function with simplified error handling
   const saveResume = useCallback(
     async (
       dataToSave: ResumeValues,
       currentResumeId: string | undefined,
-      isRetry: boolean = false,
     ): Promise<void> => {
       try {
         // Abort any existing save operation
@@ -75,10 +64,6 @@ const useAutoSave = (
 
         setIsSaving(true);
         setIsError(false);
-
-        if (!isRetry) {
-          setRetryCount(0);
-        }
 
         const newData = structuredClone(dataToSave);
 
@@ -96,13 +81,6 @@ const useAutoSave = (
         setResumeId(updatedResume.id);
         setLastSavedData(newData);
         setLastSavedAt(new Date());
-        setRetryCount(0);
-
-        // Dismiss any existing error toast
-        if (errorToastIdRef.current) {
-          toast.dismiss(errorToastIdRef.current);
-          errorToastIdRef.current = null;
-        }
 
         // Update URL if resume ID changed
         if (searchParams.get("resumeId") !== updatedResume.id) {
@@ -116,45 +94,16 @@ const useAutoSave = (
         }
       } catch (error) {
         console.error("Error saving resume data:", error);
-
-        const currentRetry = isRetry ? retryCount : retryCount + 1;
-        setRetryCount(currentRetry);
         setIsError(true);
 
-        // Show error toast with retry option
-        const canRetry = currentRetry < maxRetries;
         const errorMessage =
           error instanceof Error
             ? error.message
             : "Error saving resume data. Please try again.";
 
-        const toastId = toast.error(errorMessage, {
-          duration: canRetry ? Infinity : 5000,
-          action: canRetry
-            ? {
-                label: `Retry (${maxRetries - currentRetry} left)`,
-                onClick: () => {
-                  if (errorToastIdRef.current) {
-                    toast.dismiss(errorToastIdRef.current);
-                  }
-                  saveResume(dataToSave, currentResumeId, true);
-                },
-              }
-            : undefined,
+        toast.error(errorMessage, {
+          duration: 5000,
         });
-
-        errorToastIdRef.current = toastId;
-
-        // Auto-retry with exponential backoff
-        if (canRetry) {
-          const retryDelay = Math.min(
-            1000 * Math.pow(2, currentRetry - 1),
-            10000,
-          );
-          savingTimeoutRef.current = setTimeout(() => {
-            saveResume(dataToSave, currentResumeId, true);
-          }, retryDelay);
-        }
 
         throw error;
       } finally {
@@ -162,7 +111,7 @@ const useAutoSave = (
         abortControllerRef.current = null;
       }
     },
-    [lastSavedData, retryCount, maxRetries, searchParams],
+    [lastSavedData, searchParams],
   );
 
   // Force save function for manual saves
@@ -172,7 +121,6 @@ const useAutoSave = (
     try {
       await saveResume(resumeData, resumeId);
     } catch (error) {
-      // Error is already handled in saveResume
       console.warn("Force save failed:", error);
     }
   }, [enabled, isSaving, resumeData, resumeId, saveResume]);
@@ -211,7 +159,6 @@ const useAutoSave = (
     isError,
     hasUnsavedChanges,
     lastSavedAt,
-    retryCount,
     forceSave,
   };
 };
