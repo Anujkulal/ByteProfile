@@ -32,7 +32,7 @@ const SummaryForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) => {
       setResumeData({
         ...resumeData,
         ...values,
-        //   summary: values.summary || "",
+          // summary: values.summary || "",
       });
     });
     return () => subscription.unsubscribe();
@@ -82,8 +82,7 @@ const SummaryForm = ({ resumeData, setResumeData }: ResumeEditorFormProps) => {
                     {...field}
                     placeholder="I am a software engineer with expertise in JavaScript, TypeScript, React.js, and Next.js. I have a strong background in building scalable web applications and a passion for learning new technologies..."
                     onChange={(e) => {
-                      const skills = e.target.value.split(",");
-                      field.onChange(skills);
+                      field.onChange(e.target.value);
                     }}
                     autoFocus
                   />
