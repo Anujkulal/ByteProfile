@@ -40,6 +40,9 @@ const FetchGithubDataButton = ({ resumeData, setResumeData }: FetchGithubDataBut
     try {
       console.log("Fetching GitHub data for:", username);
       const data = await fetchGitHubDataByUsername(username.trim());
+      if (!data || !data.user) {
+      throw new Error("No data received from GitHub");
+    }
       console.log("Fetched GitHub data:", data);
 
       // Parse the name into firstName and lastName
