@@ -5,7 +5,7 @@ import Link from "next/link";
 import React from "react";
 import logo from "@/assets/logo.png"; // Adjust the path as necessary
 import { UserButton } from "@clerk/nextjs";
-import { CircleChevronLeft, CircleX, CreditCard, Moon, Sun } from "lucide-react";
+import { CircleChevronLeft, Moon, Sun } from "lucide-react";
 import { dark } from "@clerk/themes";
 import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
