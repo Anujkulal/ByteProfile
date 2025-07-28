@@ -9,13 +9,13 @@ type Props = {};
 
 const Home = (props: Props) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950">
+    <div className="min-h-screen bg-gradient-to-br bg-white/80 dark:bg-zinc-900/80">
       {/* Navigation */}
-      <nav className="border-b bg-white/80 backdrop-blur-lg dark:bg-slate-900/80 sticky top-0 z-50">
+      <nav className="backdrop-blur-lg  sticky top-0 z-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-2">
-              <div className="h-8 w-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <div className="h-8 w-8 rounded-lg flex items-center justify-center">
                 <Image
                               src={logo}
                               alt="Logo"
@@ -78,7 +78,7 @@ const Home = (props: Props) => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white dark:bg-slate-900">
+      <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
@@ -91,7 +91,7 @@ const Home = (props: Props) => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Feature 1 */}
-            <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 hover:shadow-lg transition-shadow">
+            <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 hover:shadow-lg transition-shadow">
               <div className="h-12 w-12 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
                 <Zap className="h-6 w-6 text-white" />
               </div>
@@ -104,7 +104,7 @@ const Home = (props: Props) => {
             </div>
 
             {/* Feature 2 */}
-            <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 hover:shadow-lg transition-shadow">
+            <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 hover:shadow-lg transition-shadow">
               <div className="h-12 w-12 bg-purple-600 rounded-lg flex items-center justify-center mb-4">
                 <Github className="h-6 w-6 text-white" />
               </div>
@@ -117,7 +117,7 @@ const Home = (props: Props) => {
             </div>
 
             {/* Feature 3 */}
-            <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 hover:shadow-lg transition-shadow">
+            <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 hover:shadow-lg transition-shadow">
               <div className="h-12 w-12 bg-green-600 rounded-lg flex items-center justify-center mb-4">
                 <Shield className="h-6 w-6 text-white" />
               </div>
@@ -130,7 +130,7 @@ const Home = (props: Props) => {
             </div>
 
             {/* Feature 4 */}
-            <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 hover:shadow-lg transition-shadow">
+            <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 hover:shadow-lg transition-shadow">
               <div className="h-12 w-12 bg-orange-600 rounded-lg flex items-center justify-center mb-4">
                 <FileText className="h-6 w-6 text-white" />
               </div>
@@ -143,7 +143,7 @@ const Home = (props: Props) => {
             </div>
 
             {/* Feature 5 */}
-            <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 hover:shadow-lg transition-shadow">
+            <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 hover:shadow-lg transition-shadow">
               <div className="h-12 w-12 bg-teal-600 rounded-lg flex items-center justify-center mb-4">
                 <Users className="h-6 w-6 text-white" />
               </div>
@@ -156,7 +156,7 @@ const Home = (props: Props) => {
             </div>
 
             {/* Feature 6 */}
-            <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 hover:shadow-lg transition-shadow">
+            <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 hover:shadow-lg transition-shadow">
               <div className="h-12 w-12 bg-violet-600 rounded-lg flex items-center justify-center mb-4">
                 <Star className="h-6 w-6 text-white" />
               </div>
@@ -171,12 +171,8 @@ const Home = (props: Props) => {
         </div>
       </section>
 
-      
-
-      
-
       {/* Footer */}
-      <footer className="bg-gray-900 dark:bg-slate-950 text-white py-12">
+      <footer className="py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           
           
