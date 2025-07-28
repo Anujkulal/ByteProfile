@@ -26,7 +26,7 @@ const ResumePreviewer2 = ({ resumeData, className, contentRef, printRef }: Resum
   return (
     <div
       className={cn(
-        "aspect-[210/297] h-fit w-full rounded-md bg-white text-black shadow-lg print:rounded-none print:shadow-none",
+        "aspect-[210/297] h-full w-full rounded-md bg-white text-black shadow-lg print:rounded-none print:shadow-none",
         className,
       )}
       ref={containerRef}
