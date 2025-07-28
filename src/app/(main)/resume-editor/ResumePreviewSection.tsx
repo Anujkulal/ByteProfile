@@ -29,11 +29,11 @@ return (
     <div
       className={cn(
         "hidden w-full md:flex md:w-1/2",
-        "flex-col overflow-hidden",
+        "flex-col",
         className,
       )}
     >
-      <div className="flex-1 overflow-y-auto p-4 dark:bg-slate-900/50">
+      <div className="flex-1 overflow-y-auto p-4">
         <div className="flex h-full w-full items-start justify-center" >
           {/* <ResumePreviewer2
             resumeData={resumeData} 
@@ -43,7 +43,7 @@ return (
             <TemplateComponent
               resumeData={resumeData}
               className={cn(
-                "w-full max-w-[600px] rounded-2xl border-8 border-slate-900 shadow-lg dark:border-slate-700 print:border-none print:shadow-none",
+                "w-full max-w-[600px] rounded-2xl overflow-y-auto border-8 border-slate-900 shadow-lg dark:border-slate-700 print:border-none print:shadow-none",
               )}
               printRef={printRef} // Pass the ref to template component
             />
