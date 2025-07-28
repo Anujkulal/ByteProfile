@@ -45,7 +45,7 @@ const ResumesPage = async (props: Props) => {
   const hasResumes = resumes.length > 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-200 via-white to-slate-200 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div className="min-h-screen bg-gradient-to-br">
       <main className="mx-auto w-full max-w-7xl px-4 py-8">
         {/* Header Section */}
         <div className="flex flex-col space-y-6 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 mb-8">
