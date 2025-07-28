@@ -21,7 +21,7 @@ const Navbar = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
   return (
-    <header className="">
+    <header className="sticky top-0 z-50 backdrop-blur-lg bg-white/80 dark:bg-zinc-900/10">
       <div className="mx-auto flex max-w-7xl items-center justify-between p-2">
         <div className="flex justify-between gap-4">
           <Link href={"/"} className="flex items-center gap-2">
